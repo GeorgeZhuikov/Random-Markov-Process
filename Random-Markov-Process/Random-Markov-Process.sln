@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Random-Markov-Process", "Random-Markov-Process\Random-Markov-Process.csproj", "{DB450244-4A08-42D5-BB52-03A01273A50E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB450244-4A08-42D5-BB52-03A01273A50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB450244-4A08-42D5-BB52-03A01273A50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB450244-4A08-42D5-BB52-03A01273A50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB450244-4A08-42D5-BB52-03A01273A50E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {70F2BC48-3850-460F-8C18-99FA13D989A0}
+	EndGlobalSection
+EndGlobal
