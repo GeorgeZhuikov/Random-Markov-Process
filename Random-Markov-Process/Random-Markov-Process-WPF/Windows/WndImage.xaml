@@ -1,0 +1,20 @@
+﻿<Window x:Class="Random_Markov_Process_WPF.Windows.WndImage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Random_Markov_Process_WPF.Windows"
+        mc:Ignorable="d"
+        Title="Изображение" Height="450" Width="800" WindowStyle="ToolWindow" WindowState="Maximized">
+    <Grid x:Name="grd">
+        <!--<StackPanel x:Name="stackPanel" Orientation="Vertical">-->
+        <Menu VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <MenuItem Header="Скопировать в буфер обмена" Click="MenuItem_Click_Copy"/>
+            <MenuItem Name="mitReset" Header="Сбросить график" Click="MenuItem_Click_Reset" />
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <MenuItem Header="Закрыть" Click="MenuItem_Click_Close"/>
+        </Menu>
+        <Image x:Name="img" Margin="0,18,0,0" MouseLeftButtonDown="img_MouseLeftButtonDown" MouseLeftButtonUp="img_MouseLeftButtonUp" MouseMove="img_MouseMove" MouseWheel="img_MouseWheel" SizeChanged="img_SizeChanged"  />
+        <!--</StackPanel>-->
+    </Grid>
+</Window>
