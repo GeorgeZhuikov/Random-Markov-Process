@@ -12,7 +12,6 @@ namespace Random_Markov_Process_Class_Library
         private StatesValues _statesValues;
         private IamgeRMP _realImageRMP;
         private IamgeRMP _artificialImageRMP;
-        private List<StateValue> _stateValues;
 
 
         #region Properties
@@ -31,7 +30,6 @@ namespace Random_Markov_Process_Class_Library
                     _stateCount = value;
             }
         }
-        public int MaxStateCount => _stateValues == null ? 0 : _stateValues.Count;
         public Bitmap OriginalImage { get; private set; }
         public Bitmap RealImage => _realImageRMP.Image;
         public Bitmap ArtificialImage => _artificialImageRMP.Image;

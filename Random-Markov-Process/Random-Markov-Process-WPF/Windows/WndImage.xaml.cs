@@ -24,6 +24,7 @@ namespace Random_Markov_Process_WPF.Windows
     public partial class WndImage : Window
     {
         private bool _isBusy;
+        private int _sleep = 10;
         private Point _latestMousePos;
         private Graph3D _graph3D;
 
@@ -102,7 +103,7 @@ namespace Random_Markov_Process_WPF.Windows
                 img.Source = null;
                 img.Source = Helper.BitmapToImageSource(_graph3D.DrawGraph());
 
-                Thread.Sleep(25);
+                Thread.Sleep(_sleep);
 
                 _isBusy = false;
             }
@@ -130,7 +131,7 @@ namespace Random_Markov_Process_WPF.Windows
                 img.Source = null;
                 img.Source = Helper.BitmapToImageSource(_graph3D.DrawGraph());
 
-                Thread.Sleep(25);
+                Thread.Sleep(_sleep);
 
                 _isBusy = false;
             }

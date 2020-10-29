@@ -140,5 +140,8 @@
   <ItemGroup>
     <None Include="Resources\MenuItem_Legend.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MenuItem_Reference.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

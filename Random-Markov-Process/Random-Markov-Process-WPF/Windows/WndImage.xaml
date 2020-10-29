@@ -10,7 +10,7 @@
         <!--<StackPanel x:Name="stackPanel" Orientation="Vertical">-->
         <Menu VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <MenuItem Header="Скопировать в буфер обмена" Click="MenuItem_Click_Copy"/>
-            <MenuItem Name="mitReset" Header="Сбросить график" Click="MenuItem_Click_Reset" />
+            <MenuItem Name="mitReset" Header="Сбросить положение" Click="MenuItem_Click_Reset" />
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <MenuItem Header="Закрыть" Click="MenuItem_Click_Close"/>
         </Menu>

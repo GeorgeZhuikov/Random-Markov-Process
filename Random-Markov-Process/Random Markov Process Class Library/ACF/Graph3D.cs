@@ -11,24 +11,11 @@ namespace Random_Markov_Process_Class_Library.ACF
 {
     public class Graph3D
     {
-        [DebuggerDisplay("X = {X}, Y = {Y}, Z = {Z}")]
-        private struct PointXYZ
-        {
-            public double X { get; }
-            public double Y { get; }
-            public double Z { get; }
-
-            public PointXYZ(double x, double y, double z)
-            {
-                X = x;
-                Y = y;
-                Z = z;
-            }
-        }
+        private GraphicObjects _graphicObjects = new GraphicObjects();
 
         private Font _fontAxis = new Font("Microsoft Sans Serif", 16);
         private Pen _penAxis = new Pen(Color.LightGray, 2);
-        private int _pointSize = 4;
+        private Pen _penPolygonLines = new Pen(Color.Black, 1);
         private bool _sizeChanged;
 
         private Bitmap _bmp;
@@ -38,6 +25,7 @@ namespace Random_Markov_Process_Class_Library.ACF
         private double _vAngleCos;
         private double _axis;        
         private Point _initPoint;
+        private PointXYZ _specPointXYZ;
         private double _rangeZ;
         private double _cX, _cY, _cZ;
         private double _minX;
@@ -51,9 +39,9 @@ namespace Random_Markov_Process_Class_Library.ACF
         private double _verticalAngleGrad { get; set; }
         private double _zoom { get; set; }
 
-        public double DefaultHorizontalAngleGrad { get; } = 210;
-        public double DefaultVerticalAngleGrad { get; } = 15;
-        public double DefaultZoom { get; } = .6;
+        public double DefaultHorizontalAngleGrad { get; } = 60;
+        public double DefaultVerticalAngleGrad { get; } = 340;
+        public double DefaultZoom { get; } = 1.2;
         public double HorizontalAngleGrad
         {
             get
@@ -124,26 +112,6 @@ namespace Random_Markov_Process_Class_Library.ACF
             return (double)grad / 180 * Math.PI;
         }
 
-        private Point GetPoint2D(PointXYZ pointXYZ)
-        {
-            double d2X = _initPoint.X;
-            double d2Y = _initPoint.Y;
-
-            double rXY = Math.Sqrt(Math.Pow(pointXYZ.X, 2) + Math.Pow(pointXYZ.Y, 2));
-            double fiXY = rXY == 0 ? 0 : Math.Acos(pointXYZ.X / rXY) + _hAngle;
-            var cosFiXY = Math.Cos(fiXY);
-            var sinFiXY = Math.Sin(fiXY);
-            var dXYx = rXY * cosFiXY;
-            var dXYy = rXY * sinFiXY;
-
-            var dXZy = dXYy * _vAngleSin + pointXYZ.Z * _vAngleCos;
-
-            d2X += dXYx;
-            d2Y -= dXZy;
-
-            return new Point(Convert.ToInt32(d2X), Convert.ToInt32(d2Y));
-        }
-
         private PointXYZ GetPoint2DFromArray(int i, int j)
         {
             var x = Points3D.X[i];
@@ -157,18 +125,31 @@ namespace Random_Markov_Process_Class_Library.ACF
             return new PointXYZ(valX, valY, valZ);
         }
 
-        private void DrawPolygon(Point[] points, Color color)
-        {
-            int ps = _pointSize / 2;
-            _g.FillPolygon(new SolidBrush(color), points);
-        }
-
         private PointXYZ FindPoint2DAndAddToArray(Point[] points, int index, int i, int j)
         {
             var p3D = GetPoint2DFromArray(i, j);
-            points[index] = GetPoint2D(p3D);
+            points[index] = GraphicObject.GetPoint(p3D, _initPoint, _hAngle, _vAngleSin, _vAngleCos);
 
             return p3D;
+        }
+
+        private Color GetColor(PointXYZ[] pointsXYZ)
+        {
+            Color result = Color.Transparent;
+
+            double z = int.MinValue;
+            for (int index = 0; index < 4; index++)
+            {
+                var p = pointsXYZ[index];
+                if (p.Z > z)
+                    z = p.Z;
+            }
+
+            int r = (int)(z / _axis * 225);
+            int rr = r + 30;
+            result = Color.FromArgb(rr, rr / 2, 255 - r);
+
+            return result;
         }
 
         #endregion
@@ -191,58 +172,10 @@ namespace Random_Markov_Process_Class_Library.ACF
 
                 _bmp = new Bitmap(_size.Width, _size.Height);
                 _g = Graphics.FromImage(_bmp);
+                _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             }
 
             _g.Clear(Color.White);
-        }
-
-        private void SetAxisCoefs()
-        {
-            _hAngle = GradToRad(HorizontalAngleGrad);
-            _vAngle = GradToRad(VerticalAngleGrad);
-
-            _vAngleSin = Math.Sin(_vAngle);
-            _vAngleCos = Math.Cos(_vAngle);
-
-            _axis = _side * _zoom;
-        }
-
-        private void FindInitPoint()
-        {
-            var s = _side / 2;
-            _initPoint = new Point(s, s);
-
-            var ha = _hAngle;
-            _hAngle = Math.PI + ha;
-            var va = _vAngle;
-            _vAngle = Math.PI + va;
-
-            var a = _axis / 2;
-            var ip = new PointXYZ(a, a, -a);
-
-            var p = GetPoint2D(ip);
-
-            _initPoint = new Point(p.X, p.Y);
-
-            _hAngle = ha;
-            _vAngle = va;
-        }
-
-        private void DrawAxis()
-        {
-            SolidBrush sb = new SolidBrush(Color.Black);
-
-            var xPoint = GetPoint2D(new PointXYZ(_axis, 0, 0));
-            var yPoint = GetPoint2D(new PointXYZ(0, _axis, 0));
-            var zPoint = GetPoint2D(new PointXYZ(0, 0, _axis));
-
-            _g.DrawLine(_penAxis, _initPoint, xPoint);
-            _g.DrawLine(_penAxis, _initPoint, yPoint);
-            _g.DrawLine(_penAxis, _initPoint, zPoint);
-
-            _g.DrawString(NameAxisX, _fontAxis, sb, new Point(xPoint.X - 12, xPoint.Y - 37));
-            _g.DrawString(NameAxisY, _fontAxis, sb, new Point(yPoint.X - 30, yPoint.Y - 48));
-            _g.DrawString(NameAxisZ, _fontAxis, sb, new Point(zPoint.X + 7, zPoint.Y + 4));
         }
 
         private void SetAxisRange()
@@ -277,32 +210,90 @@ namespace Random_Markov_Process_Class_Library.ACF
             _minY = minY;
             _minZ = minZ;
 
-            var xC = Math.Abs(maxX - minX);
-            var yC = Math.Abs(maxY - minY);
+            var cX = Math.Abs(maxX - minX);
+            var cY = Math.Abs(maxY - minY);
             _rangeZ = Math.Abs(maxZ - minZ);
 
-            _cX = xC > 0 ? _axis / xC : 0;
-            _cY = yC > 0 ? _axis / yC : 0;
+            _cX = cX > 0 ? _axis / cX : 0;
+            _cY = cY > 0 ? _axis / cY : 0;
             _cZ = _rangeZ > 0 ? _axis / _rangeZ : 0;
         }
 
-        private void DrawPoints()
+        private void SetAxisCoefs()
         {
+            _hAngle = GradToRad(HorizontalAngleGrad);
+            _vAngle = GradToRad(VerticalAngleGrad);
+
+            _vAngleSin = Math.Sin(_vAngle);
+            _vAngleCos = Math.Cos(_vAngle);
+
+            _axis = _side / 2 * _zoom;
+        }
+
+        private void FindInitPoint()
+        {
+            var s = _side / 2;
+            _initPoint = new Point(s, s);
+
+            var ha = _hAngle;
+            _hAngle = Math.PI + ha;
+            var va = _vAngle;
+            _vAngle = Math.PI + va;
+
+            var a = _axis / 2;
+            var ip = new PointXYZ(a, a, -a);
+            
+            var p = GraphicObject.GetPoint(ip, _initPoint, _hAngle, _vAngleSin, _vAngleCos);
+            _initPoint = new Point(p.X, p.Y);
+
+            _hAngle = ha;
+            _vAngle = va;
+
+            ip = new PointXYZ(ip.X, ip.Y, ip.Z + _axis);
+            _specPointXYZ = new PointXYZ(
+                ip.X + _axis *  Math.Sin(_hAngle) * _vAngleCos,
+                ip.Y + _axis * Math.Cos(_hAngle) * _vAngleCos, 
+                ip.Z - _axis * Math.Sin(_vAngle));
+
+            _graphicObjects.Add(new GraphicObject(GraphicObjectType.Line, _specPointXYZ, ip) { Pen = new Pen(Color.Red, 4) });
+        }
+
+        private void ProceedAxis()
+        {
+            var initialPoint = new PointXYZ(0, 0, 0);
+
+            var gos = new List<GraphicObject>();
+
+            gos.Add(new GraphicObject(GraphicObjectType.Line, initialPoint, new PointXYZ(_axis, 0, 0)) { Pen = _penAxis });
+            gos.Add(new GraphicObject(GraphicObjectType.Line, initialPoint, new PointXYZ(0, _axis, 0)) { Pen = _penAxis });
+            gos.Add(new GraphicObject(GraphicObjectType.Line, initialPoint, new PointXYZ(0, 0, _axis)) { Pen = _penAxis });
+
+            gos.Add(new GraphicObject(GraphicObjectType.String, new PointXYZ(_axis, 0, 0)) { String = NameAxisX, Color = Color.Black, Font = _fontAxis });
+            gos.Add(new GraphicObject(GraphicObjectType.String, new PointXYZ(0, _axis, 0)) { String = NameAxisY, Color = Color.Black, Font = _fontAxis });
+            gos.Add(new GraphicObject(GraphicObjectType.String, new PointXYZ(0, 0, _axis)) { String = NameAxisZ, Color = Color.Black, Font = _fontAxis });
+
+            _graphicObjects.Add(gos);
+        }
+
+        private void ProceedArrayPoints()
+        {
+            var gos = new List<GraphicObject>();
+
             var length = Points3D.Length - 1;
             for (int i = 0; i < length; i++)
                 for (int j = 0; j < length; j++)
                 {
                     var points = new Point[4];
-                    var p3D = FindPoint2DAndAddToArray(points, 0, i, j);
-                    FindPoint2DAndAddToArray(points, 1, i + 1, j);
-                    FindPoint2DAndAddToArray(points, 2, i + 1, j + 1);
-                    FindPoint2DAndAddToArray(points, 3, i, j + 1);
+                    var pointsXYZ = new PointXYZ[4];
+                    pointsXYZ[0] = FindPoint2DAndAddToArray(points, 0, i, j);
+                    pointsXYZ[1] = FindPoint2DAndAddToArray(points, 1, i + 1, j);
+                    pointsXYZ[2] = FindPoint2DAndAddToArray(points, 2, i + 1, j + 1);
+                    pointsXYZ[3] = FindPoint2DAndAddToArray(points, 3, i, j + 1);
 
-                    int r = (int)(p3D.Z / _axis * 255);
-                    Color color = Color.FromArgb(225, r, r / 2, 255 - r);
-
-                    DrawPolygon(points, color);
+                    gos.Add(new GraphicObject(GraphicObjectType.Polygon, pointsXYZ) { Color = GetColor(pointsXYZ), Pen = _penPolygonLines });
                 }
+
+            _graphicObjects.Add(gos);
         }
 
         #endregion
@@ -310,13 +301,21 @@ namespace Random_Markov_Process_Class_Library.ACF
 
         public Bitmap DrawGraph()
         {
+            _graphicObjects.Clear();
+
             SetSide(_size);
             SetBmp();
             SetAxisCoefs();
-            FindInitPoint();
-            DrawAxis();
             SetAxisRange();
-            DrawPoints();
+            FindInitPoint();
+            ProceedAxis();
+            ProceedArrayPoints();
+
+            _graphicObjects.InitialPoint = _initPoint;
+            _graphicObjects.HorizontalAngle = _hAngle;
+            _graphicObjects.VerticalAngle = _vAngle;
+            _graphicObjects.FindDistances(_specPointXYZ);
+            _graphicObjects.Draw(_g);
 
             return _bmp;
         }

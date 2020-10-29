@@ -70,12 +70,26 @@ namespace Random_Markov_Process_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to АКФ ПРИ - Автокорреляционная функция преобразованного реального изображения
-        ///АКФ ИИ - Автокорреляционная функция искусственного изображения.
+        ///   Looks up a localized string similar to ПРИ - Преобразованное реальное изображение
+        ///ИИ  - Искусственное изображение
+        ///АКФ ПРИ - Автокорреляционная функция преобразованного реального изображения
+        ///АКФ ИИ  - Автокорреляционная функция искусственного изображения.
         /// </summary>
         internal static string MenuItem_Legend {
             get {
                 return ResourceManager.GetString("MenuItem_Legend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Программа: Марковский случайный процесс
+        ///Версия: 1.0
+        ///Год: 2020
+        ///Разработчик: Жуйков ГМ (Жо).
+        /// </summary>
+        internal static string MenuItem_Reference {
+            get {
+                return ResourceManager.GetString("MenuItem_Reference", resourceCulture);
             }
         }
     }

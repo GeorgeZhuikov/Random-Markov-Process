@@ -124,6 +124,14 @@ namespace Random_Markov_Process_WPF
 
         #region Private MenuItem methods
 
+        private void ShowReference(object sender)
+        {
+            MessageBox.Show(Properties.Resources.MenuItem_Reference,
+                ((MenuItem)sender).Header.ToString(),
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
         private void ShowAbout(object sender)
         {
             MessageBox.Show(Properties.Resources.MenuItem_About,
@@ -228,6 +236,11 @@ namespace Random_Markov_Process_WPF
             Simulate();
         }
 
+        private void MenuItem_Click_Reference(object sender, RoutedEventArgs e)
+        {
+            ShowReference(sender);
+        }
+
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
             ShowAbout(sender);
@@ -275,5 +288,6 @@ namespace Random_Markov_Process_WPF
         }
 
         #endregion
+
     }
 }

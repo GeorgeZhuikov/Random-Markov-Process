@@ -37,6 +37,7 @@
                     <MenuItem Header="Моделировать" Margin="0,3,134,0" Click="MenuItem_Click_Simulate" />
                     <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                     <MenuItem Header="Справка">
+                        <MenuItem Header="Справка" Click="MenuItem_Click_Reference"/>
                         <MenuItem Header="О программе" Click="MenuItem_Click_About"/>
                         <MenuItem Header="Условные обозначения" Click="MenuItem_Click_Legend"/>
 

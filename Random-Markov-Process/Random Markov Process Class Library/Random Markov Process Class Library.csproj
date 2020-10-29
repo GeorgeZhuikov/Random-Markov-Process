@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACF\DrawObject.cs" />
     <Compile Include="ACF\Graph3D.cs" />
     <Compile Include="ACF\Point3D.cs" />
     <Compile Include="RandomMarkovProcess.cs" />

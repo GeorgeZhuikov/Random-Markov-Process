@@ -124,4 +124,7 @@
   <data name="MenuItem_Legend" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MenuItem_Legend.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="MenuItem_Reference" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MenuItem_Reference.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
 </root>
