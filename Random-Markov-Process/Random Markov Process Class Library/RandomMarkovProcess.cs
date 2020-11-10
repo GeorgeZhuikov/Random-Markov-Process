@@ -121,19 +121,24 @@ namespace Random_Markov_Process_Class_Library
             var stateValues = new List<StateValue>();
 
             int index = 0, maxStates = 20000;
+
+            var total = bmp.Width * bmp.Height;
+            var mid = total / 2;
+            var end = total + mid;
+
             var values = new int[maxStates];
-            for (int y = 0; y < bmp.Height; y++)
+
+            for (int xy = mid; xy < end; xy++)
             {
-                for (int x = 0; x < bmp.Width; x++)
+                var y = xy / bmp.Height % bmp.Height;
+                var x = (xy - y * bmp.Width) % bmp.Width;
+
+                var pixel = bmp.GetPixel(x, y);
+                var val = StatesValues.GetColorValue(pixel);
+                if (!values.Contains(val))
                 {
-                    var pixel = bmp.GetPixel(x, y);
-                    var val = StatesValues.GetColorValue(pixel);
-                    if (!values.Contains(val))
-                    {
-                        values[index] = val;
-                        stateValues.Add(new StateValue(index++, val, pixel));
-                    }
-                    if (maxStates == index) break;
+                    values[index] = val;
+                    stateValues.Add(new StateValue(index++, val, pixel));
                 }
                 if (maxStates == index) break;
             }
