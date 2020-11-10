@@ -73,18 +73,18 @@ namespace Random_Markov_Process_Class_Library
         {
             var result = false;
 
-            //try
-            //{
+            try
+            {
 
                 Proceed();
                 result = true;
 
                 SetStatus?.Invoke("Моделирование завершено");
-            //}
-            //catch
-            //{
-            //    SetStatus?.Invoke("Возникла ошибка при моделировании");
-            //}
+            }
+            catch
+            {
+                SetStatus?.Invoke("Возникла ошибка при моделировании");
+            }
 
             return result;
         }
